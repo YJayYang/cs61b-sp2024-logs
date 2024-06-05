@@ -6,7 +6,16 @@ public class JavaExercises {
     /** Returns an array [1, 2, 3, 4, 5, 6] */
     public static int[] makeDice() {
         // TODO: Fill in this function.
-        return null;
+        int [] J_array = new int[6];
+        int i = 1;
+        while (i <= 6){
+            J_array[i-1] = i;
+            i++;
+        }
+
+
+
+        return J_array;
     }
 
     /** Returns the order depending on the customer.
@@ -15,7 +24,18 @@ public class JavaExercises {
      *  In any other case, return an empty String[] of size 3. */
     public static String[] takeOrder(String customer) {
         // TODO: Fill in this function.
-        return null;
+        String c1 = "Ergun";
+        String c2 = "Erik";
+        String[] order;
+
+        if ( c1.equals(customer)) {
+            String[] order = {"beyti", "pizza", "hamburger", "tea"};
+        }else if (c2.equals(customer)) {
+            order = {"sushi", "pasta", "avocado", "coffee"};
+        }else {
+
+        }
+        return order;
     }
 
     /** Returns the positive difference between the maximum element and minimum element of the given array.
