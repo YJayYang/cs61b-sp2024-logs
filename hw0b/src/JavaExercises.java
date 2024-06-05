@@ -26,23 +26,37 @@ public class JavaExercises {
         // TODO: Fill in this function.
         String c1 = "Ergun";
         String c2 = "Erik";
-        String[] order;
+        int size = 3;
+        String[] order_1 = {"beyti", "pizza", "hamburger", "tea"};
+        String[] order_2 = {"sushi", "pasta", "avocado", "coffee"};
+        String[] empty = new String[size];
 
         if ( c1.equals(customer)) {
-            String[] order = {"beyti", "pizza", "hamburger", "tea"};
+            return order_1;
         }else if (c2.equals(customer)) {
-            order = {"sushi", "pasta", "avocado", "coffee"};
+            return order_2;
         }else {
-
+            return empty;
         }
-        return order;
+
     }
 
     /** Returns the positive difference between the maximum element and minimum element of the given array.
      *  Assumes array is nonempty. */
     public static int findMinMax(int[] array) {
         // TODO: Fill in this function.
-        return 0;
+        int temp;
+
+        for(int i=0;i<array.length-1;i++){//外层循环控制排序趟数
+            for(int j=0;j<array.length-1-i;j++){//内层循环控制每一趟排序多少次
+                if(array[j]>array[j+1]){
+                    temp=array[j];
+                    array[j]=array[j+1];
+                    array[j+1]=temp;
+                }
+            }
+        }
+        return array[array.length - 1] - array[0];
     }
 
     /**
@@ -59,7 +73,17 @@ public class JavaExercises {
 
     private static List<Integer> hailstoneHelper(int x, List<Integer> list) {
         // TODO: Fill in this function.
-        return null;
+        list.add(x);
+        while (x != 1){
+            if (x % 2 == 0){
+                x /= 2;
+                list.add(x);
+            }else {
+                x = x * 3 + 1;
+                list.add(x);
+            }
+        }
+        return list;
     }
 
 }
