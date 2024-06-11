@@ -3,6 +3,7 @@ package game2048logic;
 import game2048rendering.Board;
 import game2048rendering.Side;
 import game2048rendering.Tile;
+import net.sf.saxon.functions.ConstantFunction;
 
 import java.util.Formatter;
 
@@ -85,6 +86,14 @@ public class Model {
      * */
     public boolean emptySpaceExists() {
         // TODO: Task 2. Fill in this function.
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.size(); j++){
+                if (board.tile(i, j) == null) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
