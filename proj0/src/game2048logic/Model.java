@@ -93,7 +93,6 @@ public class Model {
                 }
             }
         }
-
         return false;
     }
 
@@ -104,7 +103,20 @@ public class Model {
      */
     public boolean maxTileExists() {
         // TODO: Task 3. Fill in this function.
+
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.size(); j++){
+                if (board.tile(i, j) != null) {
+                    if (board.tile(i,j).value() == MAX_PIECE) {
+                        return true;
+                    }
+                } else {
+                    continue;
+                }
+            }
+        }
         return false;
+
     }
 
     /**
@@ -115,6 +127,20 @@ public class Model {
      */
     public boolean atLeastOneMoveExists() {
         // TODO: Fill in this function.
+        if (emptySpaceExists()) {
+            return emptySpaceExists();
+        }
+
+         for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.size() - 1; j++) {
+                if (board.tile(i, j).value() == board.tile(i, j + 1).value()) {
+                    return true;
+                } else if (board.tile(j, i).value() == board.tile(j + 1, i).value()) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
