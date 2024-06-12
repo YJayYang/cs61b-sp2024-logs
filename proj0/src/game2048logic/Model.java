@@ -186,29 +186,39 @@ public class Model {
      * and the trailing tile does not.
      */
     public void moveTileUpAsFarAsPossible(int x, int y) {
+        // TODO: Tasks 5, 6, and 10. Fill in this function.
         Tile currTile = board.tile(x, y);
         int myValue = currTile.value();
         int targetY = y;
         for (int i = y + 1; i < board.size(); i++) {
-            Tile targetTile = board.tile(x, i);
+        Tile targetTile = board.tile(x, i);
 
-            if (targetTile != null) {
-                if (myValue == targetTile.value()) {
-                    board.move(x, i, currTile);
+        if (targetTile != null) {
+            if (myValue == targetTile.value() && !currTile.wasMerged()) {
+                // 合并相同值的 tile，确保两者都没有合并过
+                board.move(x, i, currTile);
+                score += 2 * myValue;
+                currTile.wasMerged(); // 标记当前 tile 已合并
 
-                } else {
+                return; // 合并完成后直接返回
+            } else {
+                // 移动到前一个位置
+                if (i - 1 != y) {
                     board.move(x, i - 1, currTile);
                 }
-                return; // Move completed, exit the method
+                return;
             }
+        } else {
+            targetY = i; // 更新目标位置
         }
-    // If no tile was encountered, move to the topmost position
-    board.move(x, board.size() - 1, currTile);
-
-
-        // TODO: Tasks 5, 6, and 10. Fill in this function.
-
     }
+
+    // 移动到最上方位置
+    if (targetY != y) {
+        board.move(x, targetY, currTile);
+    }
+}
+
 
     /**
      * Handles the movements of the tilt in column x of the board
@@ -218,6 +228,7 @@ public class Model {
      */
     public void tiltColumn(int x) {
         // TODO: Task 7. Fill in this function.
+        /* 在同一列中 找到距离顶端最近的Tile,依次移动。*/
         for (int i = board.size() - 1; i >= 0; i--) {
             Tile targetTile = board.tile(x, i);
             if (targetTile != null) {
@@ -228,6 +239,13 @@ public class Model {
 
     public void tilt(Side side) {
         // TODO: Tasks 8 and 9. Fill in this function.
+        board.setViewingPerspective(side);
+        for (int i = 0; i < board.size(); i++) {
+            boolean[] merged = new boolean[board.size()];
+            tiltColumn(i);
+
+        }
+        board.setViewingPerspective(Side.NORTH);
     }
 
     /**
