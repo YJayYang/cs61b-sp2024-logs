@@ -189,20 +189,22 @@ public class Model {
         Tile currTile = board.tile(x, y);
         int myValue = currTile.value();
         int targetY = y;
-        for (int i = 3; i < 4; i++) {
-            for (int j = 0; j < board.size(); j++){
-                if (board.tile(j, i) != null && myValue== board.tile(j,i).value() && j == x){
-                    board.move(j,3,currTile);
-                    score += 2 * myValue;
-                } else if (board.tile(j,i) != null && j == x && myValue != board.tile(j,i).value()){
-                    board.move(j, i - 1, currTile);
-                } else if (board.tile(j,i) == null && j == x){
-                    board.move(j, 3 ,currTile);
+        for (int i = y + 1; i < board.size(); i++) {
+            Tile targetTile = board.tile(x, i);
+
+            if (targetTile != null) {
+                if (myValue == targetTile.value()) {
+                    board.move(x, i, currTile);
+
+                } else {
+                    board.move(x, i - 1, currTile);
                 }
-
-
+                return; // Move completed, exit the method
             }
         }
+    // If no tile was encountered, move to the topmost position
+    board.move(x, board.size() - 1, currTile);
+
 
         // TODO: Tasks 5, 6, and 10. Fill in this function.
 
@@ -216,6 +218,12 @@ public class Model {
      */
     public void tiltColumn(int x) {
         // TODO: Task 7. Fill in this function.
+        for (int i = board.size() - 1; i >= 0; i--) {
+            Tile targetTile = board.tile(x, i);
+            if (targetTile != null) {
+                moveTileUpAsFarAsPossible(x, i);
+            }
+        }
     }
 
     public void tilt(Side side) {
