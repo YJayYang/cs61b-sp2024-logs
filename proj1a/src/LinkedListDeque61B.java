@@ -14,6 +14,13 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
             Previous = Prev;
             next = n;
         }
+          T getHelper(int m) {
+            if (m == 0) {
+                return item;
+            } else {
+                return next.getHelper(m - 1);
+            }
+        }
 
     }
 
@@ -34,9 +41,11 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
         if (sentinel.next == sentinel) {
             sentinel.next = newNode;
             sentinel.Previous = newNode;
+            size += 1;
             return;
         }
         sentinel.next = newNode;
+        newNode.next.Previous = newNode;
         size += 1;
 
     }
@@ -72,31 +81,74 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public T removeFirst() {
-        return null;
+        Node p = sentinel.next;
+        if (p == null) {
+            return null;
+        }else if (p.next == sentinel){
+            sentinel.next = sentinel;
+            sentinel.Previous = sentinel;
+            size -= 1;
+            return p.item;
+        }
+
+        sentinel.next = p.next;
+        sentinel.next.Previous = sentinel;
+        size -= 1;
+        return p.item;
     }
 
     @Override
     public T removeLast() {
-        return null;
+        Node p = sentinel.Previous;
+        if (p == null) {
+            return null;
+        }else if (sentinel.next == sentinel){
+            removeFirst();
+            return p.item;
+        }
+        sentinel.Previous = p.Previous;
+        p.Previous.next = sentinel;
+        size -= 1;
+        return p.item;
     }
 
     @Override
     public T get(int index) {
-        return null;
+        if (index < 0) {
+        throw new IndexOutOfBoundsException("Index cannot be negative");
     }
+
+    Node currentNode = sentinel.next;
+    int currentIndex = 0;
+
+    // Traverse the list to the specified index
+    while (currentNode != sentinel && currentIndex < index) {
+        currentNode = currentNode.next;
+        currentIndex++;
+    }
+
+    // Check if we reached the end of the list without finding the index
+    if (currentNode == sentinel || currentIndex != index) {
+        throw new IndexOutOfBoundsException("Index out of bounds");
+    }
+
+    return currentNode.item;
+    }
+
+
 
     @Override
     public T getRecursive(int index) {
-        return null;
+        return sentinel.next.getHelper(index);
     }
 }
