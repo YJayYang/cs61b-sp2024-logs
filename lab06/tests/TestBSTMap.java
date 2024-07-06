@@ -102,6 +102,8 @@ public class TestBSTMap {
         b.put("b", "pepper jack");
         b.put("e", "gouda");
 
+
+
         assertThat(b.size()).isEqualTo(5);
         assertThat(b.get("d")).isEqualTo("parmesan");
         assertThat(b.get("a")).isEqualTo("mozzarella");
@@ -112,6 +114,19 @@ public class TestBSTMap {
         b.put("b", "provolone");
         assertThat(b.size()).isEqualTo(5);
         assertThat(b.get("b")).isEqualTo("provolone");
+    }
+
+    @Test
+    public void treeRemove() {
+        BSTMap<String, String> b = new BSTMap<>();
+        b.put("d", "parmesan");
+        b.put("a", "mozzarella");
+        b.put("c", "swiss");
+        b.put("b", "pepper jack");
+        b.remove("c");
+        assertThat(b.get("c")).isNull();
+        assertThat(b.size()).isEqualTo(3);
+        assertThat(b.get("d")).isEqualTo("parmesan");
     }
 
 }
