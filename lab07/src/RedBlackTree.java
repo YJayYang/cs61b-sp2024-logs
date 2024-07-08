@@ -51,6 +51,12 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     void flipColors(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
+        if (node == null || node.left == null || node.right == null) {
+            throw new IllegalArgumentException("Node and its children must not be null");
+        }
+        node.isBlack = !node.isBlack;
+        node.left.isBlack = !node.left.isBlack;
+        node.right.isBlack = !node.right.isBlack;
     }
 
     /**
@@ -62,8 +68,18 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     RBTreeNode<T> rotateRight(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
-    }
+        if (node == null || node.left == null) {
+            throw new IllegalArgumentException("Node and its left child must not be null");
+        }
+        RBTreeNode<T> newRoot = node.left;
+        node.left = newRoot.right;
+        newRoot.right = node;
+        newRoot.isBlack = node.isBlack;
+        node.isBlack = false;
+        return newRoot;
+        }
+
+
 
     /**
      * Rotates the given node to the left. Returns the new root node of
@@ -74,7 +90,16 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     RBTreeNode<T> rotateLeft(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        if (node == null || node.right == null) {
+            throw new IllegalArgumentException("Node and its right child must not be null");
+        }
+        RBTreeNode<T> newRoot = node.right;
+        node.right = newRoot.left;
+        newRoot.left = node;
+        newRoot.isBlack = node.isBlack;
+        node.isBlack = false;
+
+        return newRoot;
     }
 
     /**
@@ -97,6 +122,11 @@ public class RedBlackTree<T extends Comparable<T>> {
     }
 
     /**
+     * check node
+     * @param node check's node
+     */
+
+    /**
      * Inserts the given node into this Red Black Tree. Comments have been provided to help break
      * down the problem. For each case, consider the scenario needed to perform those operations.
      * Make sure to also review the other methods in this class!
@@ -114,8 +144,38 @@ public class RedBlackTree<T extends Comparable<T>> {
         // TODO: Rotate right operation
 
         // TODO: Color flip
+        if (node == null) {
+            return new RBTreeNode<>(false, item);
+        }
 
-        return null; //fix this return statement
+        int cmp = item.compareTo(node.item);
+        if (cmp < 0) {
+            node.left = insert(node.left, item);
+        } else if (cmp > 0) {
+            node.right = insert(node.right, item);
+        } else {
+            // 值已存在，不做任何操作
+        }
+
+        /**
+         * Invariant: If a node has one red child, it must be on the left
+         */
+        if (isRed(node.right) && !isRed(node.left)) {
+            node = rotateLeft(node);
+        }
+        // Two consecutive left-leaning red nodes.
+        if (isRed(node.left) && isRed(node.left.left)) {
+            node = rotateRight(node);
+        }
+
+        if (isRed(node.left) && isRed(node.right)) {
+            flipColors(node);
+        }
+
+        return node;
     }
 
-}
+
+    }
+
+
