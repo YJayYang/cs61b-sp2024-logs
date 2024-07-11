@@ -11,9 +11,20 @@ import static utils.Utils.*;
 import static com.google.common.truth.Truth.assertThat;
  */
 
+import browser.NgordnetQuery;
+import main.HistoryTextHandler;
+import ngrams.NGramMap;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static com.google.common.truth.Truth.assertThat;
+import static utils.Utils.SHORT_WORDS_FILE;
+import static utils.Utils.TOTAL_COUNTS_FILE;
+
 // uncomment this test whenever you are ready!
 public class HistoryTextHandlerTest {
-    /*
+
     @Test
     public void testHandle() {
         NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
@@ -26,5 +37,5 @@ public class HistoryTextHandlerTest {
                 """;
         assertThat(actual).isEqualTo(expected);
     }
-    */
+
 }

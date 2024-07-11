@@ -110,7 +110,7 @@ public class NGramMap {
             TimeSeries original = new TimeSeries(wordDataMap.get(word), startYear,endYear);
             return original.dividedBy(countDataMap);
         }
-        return null;
+        return new TimeSeries();
     }
 
     /**
@@ -124,7 +124,7 @@ public class NGramMap {
             TimeSeries original = wordDataMap.get(word);
             return original.dividedBy(countDataMap);
         }
-        return null;
+        return new TimeSeries();
     }
 
     /**

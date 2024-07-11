@@ -55,21 +55,6 @@ public class TimeSeries extends TreeMap<Integer, Double> {
         return ts.isEmpty();
     }
 
-    private List<Integer> sort(List<Integer> list) {
-        if (this.isEmpty()) {
-            return null;
-        }
-        list = this.years();
-        Collections.sort(list);
-        return list;
-    }
-
-    private List<Integer> compareSize(List<Integer> a, List<Integer> b) {
-        if (a.size() <= b.size()) {
-            return a;
-        }
-        return b;
-    }
 
 
     /**
@@ -80,8 +65,8 @@ public class TimeSeries extends TreeMap<Integer, Double> {
         if (this.isEmpty()) {
             return new ArrayList<>();
         }
-        Set<Integer> yearsSet = this.keySet();
-        return new ArrayList<>(yearsSet);
+
+        return new ArrayList<>(this.keySet());
 
     }
 
@@ -91,15 +76,11 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public List<Double> data() {
         // TODO: Fill in this method.
-        if (this.isEmpty()) {
-            return new ArrayList<>();
+        List<Double> dataList = new ArrayList<>();
+        for (Integer year : this.years()) {
+            dataList.add(this.get(year));
         }
-        List<Integer> year = this.years();
-        List<Double> data = new ArrayList<>();
-        for (Integer y : year) {
-            data.add(this.get(y));
-        }
-        return data;
+        return dataList;
     }
 
     /**
@@ -113,28 +94,19 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries plus(TimeSeries ts) {
         // TODO: Fill in this method.
-        if (checkEmpty(ts) && checkEmpty(this)) {
-            return ts;
+        TimeSeries result = new TimeSeries();
+        for (Map.Entry<Integer, Double> entry : this.entrySet()) {
+            int year = entry.getKey();
+            double value = entry.getValue() + ts.getOrDefault(year, 0.0);
+            result.put(year, value);
         }
-        TimeSeries timeSeriesPlus = new TimeSeries();
-        List<Integer> tsYears = ts.years();
-        List<Integer> thisYears = this.years();
-
-        for (Integer year : thisYears) {
-            if (tsYears.contains(year)) {
-                timeSeriesPlus.put(year, this.get(year) + ts.get(year));
-            } else {
-                timeSeriesPlus.put(year, this.get(year));
+        for (Map.Entry<Integer, Double> entry : ts.entrySet()) {
+            int year = entry.getKey();
+            if (!this.containsKey(year)) {
+                result.put(year, entry.getValue());
             }
         }
-
-        for (Integer year : tsYears) {
-            if (!thisYears.contains(year)) {
-                timeSeriesPlus.put(year, ts.get(year));
-            }
-        }
-
-        return timeSeriesPlus;
+        return result;
     }
 
     /**
@@ -149,19 +121,17 @@ public class TimeSeries extends TreeMap<Integer, Double> {
     public TimeSeries dividedBy(TimeSeries ts) {
         // TODO: Fill in this method.
         TimeSeries result = new TimeSeries();
-        List<Integer> tsYears = ts.years();
-        List<Integer> thisYears = this.years();
-
-        for (Integer year : thisYears) {
-            if (!tsYears.contains(year)) {
-                throw new IllegalArgumentException("The given TimeSeries is missing year: " + year);
+        for (Map.Entry<Integer, Double> entry : this.entrySet()) {
+            int year = entry.getKey();
+            if (!ts.containsKey(year)) {
+                throw new IllegalArgumentException("给定的时间序列缺少年份：" + year);
             }
-            if (ts.get(year) == 0.0) {
-                throw new IllegalArgumentException("the dividedBy operation never divides by zero");
+            double divisor = ts.get(year);
+            if (divisor == 0.0) {
+                throw new IllegalArgumentException("除数不能为零。");
             }
-            result.put(year, this.get(year) / ts.get(year));
+            result.put(year, entry.getValue() / divisor);
         }
-
         return result;
 
     }
