@@ -1,8 +1,9 @@
 package ngrams;
 
 import edu.princeton.cs.algs4.In;
-
 import java.util.Collection;
+import java.util.Map;
+import java.util.HashMap;
 
 import static ngrams.TimeSeries.MAX_YEAR;
 import static ngrams.TimeSeries.MIN_YEAR;
@@ -19,44 +20,39 @@ import static ngrams.TimeSeries.MIN_YEAR;
  */
 public class NGramMap {
     // TODO: Add any necessary static/instance variables.
-    public static class Vessel<K, V> {
-        private K name;
-        private V ts;
-
-
-
-        public void put(K name, V ts) {
-            this.name = name;
-            this.ts = ts;
-        }
-
-        public V get(){
-            return ts;
-        }
-
-    }
-
+    private final Map<String, TimeSeries> wordDataMap = new HashMap<>();
+    private final TimeSeries countDataMap = new TimeSeries();
 
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
      */
     public NGramMap(String wordsFilename, String countsFilename) {
         // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
+        loadWordData(wordsFilename);
+        loadCountsData(countsFilename);
+    }
+
+    private void loadWordData(String wordsFilename) {
         In wordFile = new In(wordsFilename);
-        In countsFile = new In(countsFilename);
         while (wordFile.hasNextLine()) {
-            String wLine = wordFile.readLine();
-            String[] splitLine= wLine.split("\t");
-            TimeSeries ts = new TimeSeries();
-            Vessel<String, TimeSeries> words= new Vessel<String, TimeSeries>();
-            words.put(splitLine[0], ts);
-            words.ts.put(Integer.parseInt(splitLine[1]), Double.parseDouble(splitLine[2]));
+            String line = wordFile.readLine();
+            String[] splitLine = line.split("\t");
+            String word = splitLine[0];
+            int year = Integer.parseInt(splitLine[1]);
+            double count = Double.parseDouble(splitLine[2]);
+            TimeSeries ts = wordDataMap.getOrDefault(word, new TimeSeries());
+            ts.put(year, count);
+            wordDataMap.put(word, ts);
         }
+    }
+    private void loadCountsData(String countsFilename) {
+        In countsFile = new In(countsFilename);
         while (countsFile.hasNextLine()) {
-            String cLine = String.valueOf(countsFile.readInt());
-            String[] splitLine= cLine.split(",");
-            TimeSeries count = new TimeSeries();
-            count.put(Integer.parseInt(splitLine[1]), Double.parseDouble(splitLine[2]));
+            String line = countsFile.readLine();
+            String[] splitLine = line.split(",");
+            int year = Integer.parseInt(splitLine[0]);
+            double count = Double.parseDouble(splitLine[1]);
+            countDataMap.put(year, count);
         }
     }
 
@@ -69,8 +65,13 @@ public class NGramMap {
      */
     public TimeSeries countHistory(String word, int startYear, int endYear) {
         // TODO: Fill in this method.
-        return null;
+        if (wordDataMap.containsKey(word)) {
+            TimeSeries original = wordDataMap.get(word);
+            return new TimeSeries(original, startYear, endYear);
+        }
+        return new TimeSeries();
     }
+
 
     /**
      * Provides the history of WORD. The returned TimeSeries should be a copy, not a link to this
@@ -80,7 +81,11 @@ public class NGramMap {
      */
     public TimeSeries countHistory(String word) {
         // TODO: Fill in this method.
-        return null;
+        if (wordDataMap.containsKey(word)) {
+            TimeSeries original = wordDataMap.get(word);
+            return original;
+        }
+        return new TimeSeries();
     }
 
     /**
