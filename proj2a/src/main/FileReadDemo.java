@@ -16,7 +16,7 @@ public class FileReadDemo {
             System.out.println(nextLine);
             System.out.print("After splitting on tab characters, the first word is: ");
             String[] splitLine = nextLine.split("\t");
-            System.out.println(splitLine[0]);
+            System.out.println(splitLine[1]);
         }
     }
 }

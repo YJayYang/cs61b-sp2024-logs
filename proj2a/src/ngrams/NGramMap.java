@@ -1,5 +1,7 @@
 package ngrams;
 
+import edu.princeton.cs.algs4.In;
+
 import java.util.Collection;
 
 import static ngrams.TimeSeries.MAX_YEAR;
@@ -16,14 +18,46 @@ import static ngrams.TimeSeries.MIN_YEAR;
  * @author Josh Hug
  */
 public class NGramMap {
-
     // TODO: Add any necessary static/instance variables.
+    public static class Vessel<K, V> {
+        private K name;
+        private V ts;
+
+
+
+        public void put(K name, V ts) {
+            this.name = name;
+            this.ts = ts;
+        }
+
+        public V get(){
+            return ts;
+        }
+
+    }
+
 
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
      */
     public NGramMap(String wordsFilename, String countsFilename) {
         // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
+        In wordFile = new In(wordsFilename);
+        In countsFile = new In(countsFilename);
+        while (wordFile.hasNextLine()) {
+            String wLine = wordFile.readLine();
+            String[] splitLine= wLine.split("\t");
+            TimeSeries ts = new TimeSeries();
+            Vessel<String, TimeSeries> words= new Vessel<String, TimeSeries>();
+            words.put(splitLine[0], ts);
+            words.ts.put(Integer.parseInt(splitLine[1]), Double.parseDouble(splitLine[2]));
+        }
+        while (countsFile.hasNextLine()) {
+            String cLine = String.valueOf(countsFile.readInt());
+            String[] splitLine= cLine.split(",");
+            TimeSeries count = new TimeSeries();
+            count.put(Integer.parseInt(splitLine[1]), Double.parseDouble(splitLine[2]));
+        }
     }
 
     /**
