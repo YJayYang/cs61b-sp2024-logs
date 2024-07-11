@@ -93,7 +93,10 @@ public class NGramMap {
      */
     public TimeSeries totalCountHistory() {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries defensiveCopy = new TimeSeries();
+        defensiveCopy = countDataMap;
+
+        return defensiveCopy;
     }
 
     /**
@@ -103,6 +106,10 @@ public class NGramMap {
      */
     public TimeSeries weightHistory(String word, int startYear, int endYear) {
         // TODO: Fill in this method.
+        if (wordDataMap.containsKey(word)) {
+            TimeSeries original = new TimeSeries(wordDataMap.get(word), startYear,endYear);
+            return original.dividedBy(countDataMap);
+        }
         return null;
     }
 
@@ -113,6 +120,10 @@ public class NGramMap {
      */
     public TimeSeries weightHistory(String word) {
         // TODO: Fill in this method.
+        if (wordDataMap.containsKey(word)) {
+            TimeSeries original = wordDataMap.get(word);
+            return original.dividedBy(countDataMap);
+        }
         return null;
     }
 
@@ -124,7 +135,14 @@ public class NGramMap {
     public TimeSeries summedWeightHistory(Collection<String> words,
                                           int startYear, int endYear) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries summedHistory = new TimeSeries();
+        for (String word : words) {
+            if (wordDataMap.containsKey(word)) {
+                TimeSeries wordHistory = new TimeSeries(wordDataMap.get(word), startYear, endYear);
+                summedHistory = summedHistory.plus(wordHistory.dividedBy(countDataMap));
+            }
+        }
+        return summedHistory;
     }
 
     /**
@@ -133,7 +151,14 @@ public class NGramMap {
      */
     public TimeSeries summedWeightHistory(Collection<String> words) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries summedHistory = new TimeSeries();
+        for (String word : words) {
+            if (wordDataMap.containsKey(word)) {
+                TimeSeries wordHistory = wordDataMap.get(word);
+                summedHistory = summedHistory.plus(wordHistory.dividedBy(countDataMap));
+            }
+        }
+        return summedHistory;
     }
 
     // TODO: Add any private helper methods.
